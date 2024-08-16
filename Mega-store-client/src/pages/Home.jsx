@@ -9,7 +9,7 @@ import Pagination from "../components/Pagination";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic()
-  const { loading, user, brandName , category} = useContext(Context);
+  const { loading, user, brandName, category, minPrice, maxPrice , setBrandName, setCategory, setMinPrice, setMaxPrice} = useContext(Context);
 
   // pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -26,15 +26,14 @@ const Home = () => {
   const [DateSort, setDateSort] = useState('')
 
 
+
   const { data } = useQuery({
-    queryKey: ["products", currentPage, itemsPerPage, pages, search, sort, DateSort, brandName, category],
+    queryKey: ["products", currentPage, itemsPerPage, pages, search, sort, DateSort, brandName, category, minPrice, maxPrice],
     enabled: !loading && !!user,
     queryFn: async () => {
-      const { data } = await axiosPublic.get(`/allProducts?page=${currentPage}&size=${itemsPerPage}&search=${search}&sort=${sort}&DateSort=${DateSort}&brandName=${brandName}&category=${category}`
-      );
+      const { data } = await axiosPublic.get(`/allProducts?page=${currentPage}&size=${itemsPerPage}&search=${search}&sort=${sort}&DateSort=${DateSort}&brandName=${brandName}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}`);
       return data;
     },
-
   });
   // console.log(data)
   // console.log(brandName)
@@ -70,10 +69,21 @@ const Home = () => {
     setCurrentPage(0);
   }
 
+  // reset
+  // for reset
+  const handleReset = () => {
+    setSearch("")
+    setSort("")
+    setDateSort("")
+    setBrandName("")
+    setCategory("")
+    setMinPrice(0)
+    setMaxPrice(1000)
+  }
 
 
   return (
-    <div className="h-full border-2 border-green-500 p-5">
+    <div className="h-full border-2 border-green-500 p-5 relative">
 
       <div className="mb-10 flex flex-col md:flex-row items-center gap-5 md:gap-8 justify-start mt-10 ">
         {/* search */}
@@ -82,7 +92,7 @@ const Home = () => {
         </form>
 
         {/* Reset button */}
-        {/* <button onClick={handleReset} className="btn">Reset</button> */}
+        <button onClick={handleReset} className="text-white p-2 rounded bg-primary   input input-bordered input-success">Reset</button>
 
         {/* sort in new method */}
         <div>
@@ -123,22 +133,29 @@ const Home = () => {
         </div>
 
 
-       
 
       </div>
 
-      <div className="mt-10  grid grid-cols-2 gap-6">
-        {
-          products?.map(singleData => (
+      {
+        products && products?.length > 0 ? (<div className="mt-10  grid grid-cols-2 gap-6">
+          {
+            products?.map(singleData => (
 
-            <Card key={singleData._id} singleData={singleData} />
-          ))
-        }
+              <Card key={singleData._id} singleData={singleData} />
+            ))
+          }
 
-      </div>
+        </div>) : (
+          <div className="flex justify-center items-center text-3xl text-red-600">
+            <h2>No data Found ...</h2>
+          </div>
+        )
+      }
 
       {/* pagination */}
-      <Pagination handlePrevious={handlePrevious} pages={pages} currentPage={currentPage} setCurrentPage={setCurrentPage} handleItemPerPage={handleItemPerPage} itemsPerPage={itemsPerPage} handleNext={handleNext}></Pagination>
+      <div className={`border-2 border-red-500 ${products?.length < 0 ? "mt-[400px]" : "mt-4"}`}>
+        <Pagination handlePrevious={handlePrevious} pages={pages} currentPage={currentPage} setCurrentPage={setCurrentPage} handleItemPerPage={handleItemPerPage} itemsPerPage={itemsPerPage} handleNext={handleNext}></Pagination>
+      </div>
     </div>
   )
 }

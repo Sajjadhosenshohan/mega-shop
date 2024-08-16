@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 
 import { createContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
@@ -51,6 +52,10 @@ const AuthProvider = ({ children }) => {
     // Category
     const [category, setCategory] = useState('')
 
+    // Price Range
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(1000);
+
     const info = {
         user,
         loading,
@@ -60,11 +65,18 @@ const AuthProvider = ({ children }) => {
         signInWithGoogle,
         logOut,
 
+        // filter by brand name
         setBrandName,
         brandName,
-
+        // category
         category,
-        setCategory
+        setCategory,
+
+        // price range
+        minPrice,
+        maxPrice,
+        setMinPrice,
+        setMaxPrice
     }
     return (
         <Context.Provider value={info}>

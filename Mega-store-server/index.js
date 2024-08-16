@@ -86,13 +86,13 @@ async function run() {
 
             // query by brand name
             const brandName = req.query.brandName || "";
-            if(brandName){
+            if (brandName) {
                 query.brandName = brandName;
             }
 
             // query by category name
             const category = req.query.category || "";
-            if(category){
+            if (category) {
                 query.category = category;
             }
 
@@ -102,29 +102,39 @@ async function run() {
                 query.productName = { $regex: search, $options: "i" };
             }
 
-            // new sort by price high to low
-            const sort = req.query.sort || "";
-            // ase means small to big and dsc means big to small
-            let options = {}
-            if (sort) {
-                options = { sort: { price: sort === 'asc' ? 1 : -1 } }
-            }
 
 
-            // date sort
-            const DateSort = req.query.DateSort || "";
-
+            // Initialize sorting objects
+            let price_query = {};
             let sortQuery = {};
-            if (DateSort === "newest") {
-                sortQuery = { productCreationDate: -1 }; // Newest first
-            } else if (DateSort === "oldest") {
-                sortQuery = { productCreationDate: 1 }; // Oldest first
+
+            // Sort by price
+            const sort = req.query.sort || "";
+            if (sort === "asc") {
+                price_query.price = 1; // Ascending order
+            } else if (sort === "dsc") {
+                price_query.price = -1; // Descending order
             }
 
+            // Sort by date
+            const DateSort = req.query.DateSort || "";
+            if (DateSort === "newest") {
+                sortQuery.productCreationDate = -1; // Newest first
+            } else if (DateSort === "oldest") {
+                sortQuery.productCreationDate = 1; // Oldest first
+            }
+
+            // Merge sorting objects
+            const finalSortQuery = { ...price_query, ...sortQuery };
+
+            // Filter by price range
+            const minPrice = parseFloat(req.query.minPrice) || 0;
+            const maxPrice = parseFloat(req.query.maxPrice) || 1000;
+            query.price = { $gte: minPrice, $lte: maxPrice };
 
 
-            const allProducts = await megaShop_products_collection.find(query, options)
-                .sort(sortQuery) // Apply sorting here
+            const allProducts = await megaShop_products_collection.find(query)
+                .sort(finalSortQuery) // Apply sorting here
                 .skip(page * size)
                 .limit(size)
                 .toArray();

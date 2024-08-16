@@ -2,7 +2,7 @@ import './pagination.css';
 /* eslint-disable react/prop-types */
 const Pagination = ({ handlePrevious,pages,currentPage,setCurrentPage,handleItemPerPage,itemsPerPage,handleNext}) => {
     return (
-        <div className={`flex w-full mt-8`}>
+        <div className={`flex w-full `}>
             <div className="pagination mt-10 my-auto justify-center items-center shadow-lg inline-flex  bg-white">
                 <button type="button" onClick={handlePrevious} className="inline-flex items-center px-2 py-2 text-sm font-semibold  rounded-l-md ">
                     <span className="bg-primary px-2 py-2 rounded-md text-white">Previous</span>

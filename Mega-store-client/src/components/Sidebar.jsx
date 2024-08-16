@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
 import { Context } from '../Provider/AuthProvider';
 import Category from './Category';
+import PriceRange from './PriceRange';
 const Home = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
@@ -9,7 +10,7 @@ const Home = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
-  const {setCategory,setBrandName} = useContext(Context)
+  const {setCategory,setBrandName, setMinPrice, setMaxPrice, minPrice, maxPrice} = useContext(Context)
   
   return (
     <div className="flex h-full">
@@ -123,6 +124,10 @@ const Home = () => {
                 {/* category */}
 
                 <Category setCategory={setCategory}/>
+
+                {/* price range */}
+
+                <PriceRange minPrice={minPrice} maxPrice={maxPrice} setMinPrice={setMinPrice} setMaxPrice={setMaxPrice}/>
               </ul>
             </div>
           </div>
