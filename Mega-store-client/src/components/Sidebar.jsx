@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { RxCross2 } from "react-icons/rx";
+import { Context } from '../Provider/AuthProvider';
+import Category from './Category';
 const Home = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
@@ -7,6 +9,8 @@ const Home = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
+  const {setCategory,setBrandName} = useContext(Context)
+  
   return (
     <div className="flex h-full">
       {isSidebarVisible && (
@@ -14,7 +18,7 @@ const Home = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between ">
               <h2>Dashboard</h2>
-              
+
               <button className="p-2 bg-gray-100 rounded-full block md:hidden" onClick={toggleSidebar}>
                 {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-5 fill-current dark:text-gray-800">
                   <rect width="352" height="32" x="80" y="96"></rect>
@@ -75,20 +79,64 @@ const Home = () => {
                     <span>Settings</span>
                   </a>
                 </li>
+
+                <div>
+
+                  <p className='mb-2'>Please select your Brand name:</p>
+                  <div className="flex flex-col gap-3 ">
+                    <span className='flex  gap-2'>
+                      <input
+                        type="radio"
+                        id="Realme"
+                        name="brand"
+                        value="Realme"
+                        onChange={e => setBrandName(e.target.value)}
+                      />
+                      <label htmlFor="Realme">Realme</label>
+                    </span>
+
+                    <span className='flex  gap-2'>
+                      <input
+                        type="radio"
+                        id="Samsung"
+                        name="brand"
+                        value="Samsung"
+                        onChange={e => setBrandName(e.target.value)}
+                      />
+                      <label htmlFor="Samsung">Samsung</label>
+                    </span>
+
+                    <span className='flex  gap-2'>
+                      <input
+                        type="radio"
+                        id="Sansui"
+                        name="brand"
+                        value="Sansui"
+                        onChange={e => setBrandName(e.target.value)}
+                      />
+                      <label htmlFor="Sansui">Sansui</label>
+                    </span>
+                  </div>
+
+                </div>
+
+                {/* category */}
+
+                <Category setCategory={setCategory}/>
               </ul>
             </div>
           </div>
         </div>
       )}
-      
+
       {
         !isSidebarVisible && <div className="flex-1 p-6">
-       
-        <button className="mb-4 px-4 py-2 bg-blue-500 text-white rounded block md:hidden" onClick={toggleSidebar}>
-          Toggle Sidebar
-        </button>
-        
-      </div>
+
+          <button className="mb-4 px-4 py-2 bg-blue-500 text-white rounded block md:hidden" onClick={toggleSidebar}>
+            Toggle Sidebar
+          </button>
+
+        </div>
       }
     </div>
   );

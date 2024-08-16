@@ -1,11 +1,11 @@
 
-import { createContext, useState } from "react";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { createContext, useEffect, useState } from "react";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { auth } from "../Firebase/Firebase.config";
 
-const googleProvider = new GoogleAuthProvider();
 
 export const Context = createContext(null);
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
@@ -33,6 +33,24 @@ const AuthProvider = ({ children }) => {
         return signOut(auth)
     }
 
+    // onAuthStateChange
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, currentUser => {
+            setUser(currentUser)
+        })
+        return () => {
+            return unsubscribe()
+        }
+    }, [])
+
+
+
+    // brand name
+    const [brandName, setBrandName] = useState('')
+
+    // Category
+    const [category, setCategory] = useState('')
+
     const info = {
         user,
         loading,
@@ -40,7 +58,13 @@ const AuthProvider = ({ children }) => {
         createUser,
         signIn,
         signInWithGoogle,
-        logOut
+        logOut,
+
+        setBrandName,
+        brandName,
+
+        category,
+        setCategory
     }
     return (
         <Context.Provider value={info}>

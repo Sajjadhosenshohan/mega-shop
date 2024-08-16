@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { MongoClient, ServerApiVersion} = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const port = process.env.PORT || 3000;
 
 const corsOptions = {
@@ -31,7 +31,8 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const megaShop_user_collection = client.db("megaShop").collection("megaShop_user");
-        
+        const megaShop_products_collection = client.db("megaShop").collection("megaShop-products");
+
 
         // // jwt related api
         // app.post('/jwt', async (req, res) => {
@@ -56,15 +57,89 @@ async function run() {
         //     })
         // }
 
-        
+
 
         // await client.db("admin").command({ ping: 1 });
-        
-        app.post("/users", async(req,res)=>{
+
+        app.post("/users", async (req, res) => {
             const data = req.body;
+
+            const query = { email: data?.email }
+            const isAvailable = await megaShop_user_collection.findOne(query)
+            if (isAvailable) {
+                return res.send({ message: 'user already exists', insertedId: null })
+            }
+
             const result = await megaShop_user_collection.insertOne(data);
             res.send(result)
         })
+
+        app.get("/allProducts", async (req, res) => {
+
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+
+            // query
+            let query = {
+
+            };
+
+            // query by brand name
+            const brandName = req.query.brandName || "";
+            if(brandName){
+                query.brandName = brandName;
+            }
+
+            // query by category name
+            const category = req.query.category || "";
+            if(category){
+                query.category = category;
+            }
+
+            // search
+            const search = req.query.search || "";
+            if (search) {
+                query.productName = { $regex: search, $options: "i" };
+            }
+
+            // new sort by price high to low
+            const sort = req.query.sort || "";
+            // ase means small to big and dsc means big to small
+            let options = {}
+            if (sort) {
+                options = { sort: { price: sort === 'asc' ? 1 : -1 } }
+            }
+
+
+            // date sort
+            const DateSort = req.query.DateSort || "";
+
+            let sortQuery = {};
+            if (DateSort === "newest") {
+                sortQuery = { productCreationDate: -1 }; // Newest first
+            } else if (DateSort === "oldest") {
+                sortQuery = { productCreationDate: 1 }; // Oldest first
+            }
+
+
+
+            const allProducts = await megaShop_products_collection.find(query, options)
+                .sort(sortQuery) // Apply sorting here
+                .skip(page * size)
+                .limit(size)
+                .toArray();
+
+
+            const count = await megaShop_products_collection.countDocuments(query)
+            // console.log(allProducts, count)
+
+            res.send({
+                products: allProducts,
+                count: count
+            })
+
+        })
+
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
 

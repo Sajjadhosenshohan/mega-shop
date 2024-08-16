@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GrSearch } from "react-icons/gr";
+// import { GrSearch } from "react-icons/gr";
+import { Context } from '../Provider/AuthProvider';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(true);
+
+  const {user} = useContext(Context)
 
   return (
     <nav className="relative bg-white shadow dark:bg-gray-800 border-2 border-red-500">
@@ -64,7 +67,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className='hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow '>
+          {/* <div className='hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow '>
 
             <input type='text' placeholder='search product here...' className='w-full px-2 py-2 outline-none  border-none rounded-full rounded-r-none' />
 
@@ -72,14 +75,14 @@ const Navbar = () => {
             <div className='text-lg min-w-[50px] h-10 bg-blue-500 flex items-center justify-center rounded-r-full text-white'>
               <GrSearch />
             </div>
-          </div>
+          </div> */}
 
 
           <div
             className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center ${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'
               }`}
           >
-            <div className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
+            <div className="flex flex-col gap-3 -mx-6 lg:flex-row lg:items-center lg:mx-8 text-white">
               <Link to='/login'>
                 <button className="font-medium  text-base  md:pb-2 md:px-4 py-1 px-1 rounded-lg bg-primary text-center">
                   Login
@@ -121,7 +124,7 @@ const Navbar = () => {
               >
                 <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
                   <img
-                    src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
+                   src={user?.photoURL || "https://i.ibb.co/fYRGNg6/profile.jpg"}
                     className="object-cover w-full h-full"
                     alt="avatar"
                   />

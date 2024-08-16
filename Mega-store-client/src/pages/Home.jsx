@@ -1,9 +1,144 @@
 // import Sidebar from "../components/Sidebar"
 
+import { useContext, useState } from "react";
+import Card from "../components/card"
+import { Context } from "../Provider/AuthProvider";
+import useAxiosPublic from "../Hooks/UseAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
+import Pagination from "../components/Pagination";
+
 const Home = () => {
+  const axiosPublic = useAxiosPublic()
+  const { loading, user, brandName , category} = useContext(Context);
+
+  // pagination
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const pages = []
+
+  // search
+  const [search, setSearch] = useState('');
+
+  // sort
+  const [sort, setSort] = useState('')
+
+  // DateSort
+  const [DateSort, setDateSort] = useState('')
+
+
+  const { data } = useQuery({
+    queryKey: ["products", currentPage, itemsPerPage, pages, search, sort, DateSort, brandName, category],
+    enabled: !loading && !!user,
+    queryFn: async () => {
+      const { data } = await axiosPublic.get(`/allProducts?page=${currentPage}&size=${itemsPerPage}&search=${search}&sort=${sort}&DateSort=${DateSort}&brandName=${brandName}&category=${category}`
+      );
+      return data;
+    },
+
+  });
+  // console.log(data)
+  // console.log(brandName)
+
+
+
+  // pagination
+  const { products = [], count = 0 } = data || {};
+
+  const numberOfPages = Math.ceil(count / itemsPerPage);
+  for (let i = 0; i < numberOfPages; i++) {
+    pages.push(i)
+  }
+
+  const handleItemPerPage = (e) => {
+    setItemsPerPage(parseInt(e.target.value));
+    setCurrentPage(0);
+  }
+
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
+  const handleNext = () => {
+    if (currentPage < pages.length - 1) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value)
+    setCurrentPage(0);
+  }
+
+
+
   return (
-    <div className="h-full border-2 border-green-500">
-      home
+    <div className="h-full border-2 border-green-500 p-5">
+
+      <div className="mb-10 flex flex-col md:flex-row items-center gap-5 md:gap-8 justify-start mt-10 ">
+        {/* search */}
+        <form className="flex">
+          <input onChange={(e) => handleSearch(e)} type="text" name="search" className="grow p-2 rounded border-primary  border-2 input input-bordered input-success" placeholder="Search by product name" />
+        </form>
+
+        {/* Reset button */}
+        {/* <button onClick={handleReset} className="btn">Reset</button> */}
+
+        {/* sort in new method */}
+        <div>
+          <select
+            onChange={e => {
+              setSort(e.target.value)
+
+            }}
+            value={sort}
+            name='sort'
+            id='sort'
+            className="grow p-2 rounded border-primary  border-2 input input-bordered input-success"
+          // className='border p-4 rounded-md'
+          >
+            <option value=''>Sort By Price</option>
+            <option value='dsc'>High to Low</option>
+            <option value='asc'>Low to High</option>
+          </select>
+        </div>
+
+        {/* DateSort in new method */}
+        <div>
+          <select
+            onChange={e => {
+              setDateSort(e.target.value)
+
+            }}
+            value={DateSort}
+            name='sort'
+            id='sort'
+            className="grow p-2 rounded border-primary  border-2 input input-bordered input-success"
+          // className='border p-4 rounded-md'
+          >
+            <option value="">Sort by Date</option>
+            <option value="newest"> Newest first</option>
+            <option value="oldest"> Oldest first</option>
+          </select>
+        </div>
+
+
+       
+
+      </div>
+
+      <div className="mt-10  grid grid-cols-2 gap-6">
+        {
+          products?.map(singleData => (
+
+            <Card key={singleData._id} singleData={singleData} />
+          ))
+        }
+
+      </div>
+
+      {/* pagination */}
+      <Pagination handlePrevious={handlePrevious} pages={pages} currentPage={currentPage} setCurrentPage={setCurrentPage} handleItemPerPage={handleItemPerPage} itemsPerPage={itemsPerPage} handleNext={handleNext}></Pagination>
     </div>
   )
 }
