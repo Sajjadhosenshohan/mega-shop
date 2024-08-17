@@ -100,7 +100,7 @@ const Register = () => {
       </Helmet> */}
       <div className='flex flex-col p-6 rounded-md sm:p-10 bg-white text-gray-900'>
         <div className='mb-8 text-center'>
-          <h1 className='my-3 text-4xl font-bold'>Register</h1>
+          <h1 className='my-3 text-4xl font-bold text-primary'>Register</h1>
         </div>
         <form onSubmit={handleSignUp} className='space-y-6'>
           <div className='grid grid-cols-1  gap-6'>

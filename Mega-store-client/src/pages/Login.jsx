@@ -10,7 +10,6 @@ import Swal from 'sweetalert2'
 const Login = () => {
   
   const axiosPublic = useAxiosPublic()
-  // const navigate = useNavigate()
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.pathname || "/";
@@ -98,12 +97,9 @@ const Login = () => {
   return (
     <div className='flex justify-center items-center mt-10'>
 
-      {/* <Helmet>
-        <title>Register Hr</title>
-      </Helmet> */}
       <div className='flex flex-col p-6 rounded-md sm:p-10 bg-white text-gray-900'>
         <div className='mb-8 text-center'>
-          <h1 className='my-3 text-4xl font-bold'>Login</h1>
+          <h1 className='my-3 text-4xl font-bold text-primary'>Login</h1>
         </div>
         <form onSubmit={handleSignUp} className='space-y-6'>
           <div className='grid grid-cols-1  gap-6'>
@@ -159,7 +155,7 @@ const Login = () => {
           <p>Continue with Google</p>
         </div>
 
-        <p className=' text-sm text-center text-gray-400'>
+        <p className='mt-1 text-sm text-center text-gray-400'>
           Do not have an account?{' '}
           <Link to='/register' className='hover:underline hover:text-primary text-gray-600'>
             Register
