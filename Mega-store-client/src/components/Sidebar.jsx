@@ -21,13 +21,9 @@ const Home = () => {
             <div className="flex items-center justify-between ">
               <h2 className='mt-4 md:text-3xl md:font-bold'>Filter</h2>
 
-              <button className="p-2 bg-gray-50 rounded-full " onClick={toggleSidebar}>
-                {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="w-5 h-5 fill-current dark:text-gray-800">
-                  <rect width="352" height="32" x="80" y="96"></rect>
-                  <rect width="352" height="32" x="80" y="240"></rect>
-                  <rect width="352" height="32" x="80" y="384"></rect>
-                </svg> */}
-                <RxCross2 className='text-[#ef2d2d]' />
+              <button className="p-3 bg-gray-50 rounded-full " onClick={toggleSidebar}>
+                
+                <RxCross2 className='text-[#ef2d2d] font-bold' />
               </button>
             </div>
 
