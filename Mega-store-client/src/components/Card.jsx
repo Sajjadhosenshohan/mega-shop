@@ -1,12 +1,13 @@
+/* eslint-disable react/prop-types */
 const Card = ({ singleData }) => {
 
-    const { productName, productImage, brandName, price, ratings, productCreationDate } = singleData;
+    const { productName, productImage, brandName, price, ratings, productCreationDate , category} = singleData;
 
     return (
         <div className="max-w-md overflow-hidden bg-white rounded-lg shadow-lg">
-            <div className="flex flex-col">
+            <div className="flex flex-col p-3 group">
                 <div
-                    className="bg-center bg-no-repeat h-48"
+                    className="bg-center hover:scale-110 transition-all duration-300 ease-in-out  mt-3 bg-no-repeat h-48"
                     style={{
                         backgroundImage: `url('${productImage}')`,
                         backgroundSize: "contain"

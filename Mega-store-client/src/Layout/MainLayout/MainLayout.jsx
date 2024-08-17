@@ -7,9 +7,9 @@ const MainLayout = () => {
     return (
         <div className="bg-secondary">
             <Navbar />
-            <div className='container flex  px-6 py-4 mx-auto  min-h-[calc(100vh-156px)] gap-3'>
+            <div className='container flex   p-4 mx-auto  min-h-[calc(100vh-156px)] gap-3'>
                 <Sidebar />
-                <div className="border border-purple-300 mx-auto  flex-1">
+                <div className=" mx-auto  flex-1">
                     <Outlet></Outlet>
                 </div>
             </div>

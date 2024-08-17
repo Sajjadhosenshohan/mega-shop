@@ -1,6 +1,6 @@
 // import Sidebar from "../components/Sidebar"
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Card from "../components/card"
 import { Context } from "../Provider/AuthProvider";
 import useAxiosPublic from "../Hooks/UseAxiosPublic";
@@ -9,12 +9,14 @@ import Pagination from "../components/Pagination";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic()
-  const { loading, user, brandName, category, minPrice, maxPrice , setBrandName, setCategory, setMinPrice, setMaxPrice} = useContext(Context);
+  const { loading, user, brandName, category, minPrice, maxPrice, setBrandName, setCategory, setMinPrice, setMaxPrice, setAllProducts } = useContext(Context);
+  // akta state neben
+  // const [category, setCategory] = useState('')
 
   // pagination
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const pages = []
+  const pages = [];
 
   // search
   const [search, setSearch] = useState('');
@@ -29,7 +31,7 @@ const Home = () => {
 
   const { data } = useQuery({
     queryKey: ["products", currentPage, itemsPerPage, pages, search, sort, DateSort, brandName, category, minPrice, maxPrice],
-    enabled: !loading && !!user,
+    enabled: !loading ,
     queryFn: async () => {
       const { data } = await axiosPublic.get(`/allProducts?page=${currentPage}&size=${itemsPerPage}&search=${search}&sort=${sort}&DateSort=${DateSort}&brandName=${brandName}&category=${category}&minPrice=${minPrice}&maxPrice=${maxPrice}`);
       return data;
@@ -39,9 +41,15 @@ const Home = () => {
   // console.log(brandName)
 
 
-
   // pagination
   const { products = [], count = 0 } = data || {};
+
+  // please skip this function its painful to setup
+  useEffect(() => {
+    setAllProducts(products);
+  }, [data]);
+
+
 
   const numberOfPages = Math.ceil(count / itemsPerPage);
   for (let i = 0; i < numberOfPages; i++) {
@@ -83,9 +91,9 @@ const Home = () => {
 
 
   return (
-    <div className="h-full border-2 border-green-500 p-5 relative">
+    <div className="h-full p-5 relative">
 
-      <div className="mb-10 flex flex-col md:flex-row items-center gap-5 md:gap-8 justify-start mt-10 ">
+      <div className="mb-10 flex flex-col lg:flex-row items-center gap-5 lg:gap-8 justify-center mt-10 ">
         {/* search */}
         <form className="flex">
           <input onChange={(e) => handleSearch(e)} type="text" name="search" className="grow p-2 rounded border-primary  border-2 input input-bordered input-success" placeholder="Search by product name" />
@@ -137,7 +145,7 @@ const Home = () => {
       </div>
 
       {
-        products && products?.length > 0 ? (<div className="mt-10  grid grid-cols-2 gap-6">
+        products && products?.length > 0 ? (<div className="mt-10  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {
             products?.map(singleData => (
 
@@ -152,10 +160,22 @@ const Home = () => {
         )
       }
 
-      {/* pagination */}
-      <div className={`border-2 border-red-500 ${products?.length < 0 ? "mt-[400px]" : "mt-4"}`}>
-        <Pagination handlePrevious={handlePrevious} pages={pages} currentPage={currentPage} setCurrentPage={setCurrentPage} handleItemPerPage={handleItemPerPage} itemsPerPage={itemsPerPage} handleNext={handleNext}></Pagination>
+      {/* Pagination */}
+      <div
+        className={` flex-wrap justify-center items-center w-full lg:flex ${products?.length < 0 ? "mt-[400px]" : "mt-4"
+          }`}
+      >
+        <Pagination
+          handlePrevious={handlePrevious}
+          pages={pages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          handleItemPerPage={handleItemPerPage}
+          itemsPerPage={itemsPerPage}
+          handleNext={handleNext}
+        />
       </div>
+
     </div>
   )
 }

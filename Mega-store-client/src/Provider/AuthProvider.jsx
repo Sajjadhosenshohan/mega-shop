@@ -10,8 +10,10 @@ const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     // const axiosPublic = useAxiosPublic()
+    
+
 
     const createUser = (email, password) => {
         setLoading(true)
@@ -38,6 +40,9 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser)
+            setLoading(false)
+            console.log(currentUser)
+            
         })
         return () => {
             return unsubscribe()
@@ -45,6 +50,14 @@ const AuthProvider = ({ children }) => {
     }, [])
 
 
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const toggleSidebar = () => {
+      setIsSidebarVisible(!isSidebarVisible);
+    };
+
+    const [allProducts, setAllProducts] = useState([])
+
+    // console.log(allProducts)
 
     // brand name
     const [brandName, setBrandName] = useState('')
@@ -57,6 +70,9 @@ const AuthProvider = ({ children }) => {
     const [maxPrice, setMaxPrice] = useState(1000);
 
     const info = {
+        setAllProducts,
+        allProducts,
+
         user,
         loading,
         setLoading,
@@ -76,7 +92,12 @@ const AuthProvider = ({ children }) => {
         minPrice,
         maxPrice,
         setMinPrice,
-        setMaxPrice
+        setMaxPrice,
+
+        // sidebar
+        toggleSidebar,
+        isSidebarVisible,
+        setIsSidebarVisible
     }
     return (
         <Context.Provider value={info}>

@@ -1,10 +1,9 @@
 const Footer = () => {
   return (
-    <footer className="bg-white border-2 border-red-500">
+    <footer className="bg-white ">
       <div className="container flex flex-col items-center justify-between p-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
-        <a href="#">
-          <img className="w-auto h-7" src="https://merakiui.com/images/full-logo.svg" alt="" />
-        </a>
+        <h2 className='text-xl md:text-3xl text-[#172554] font-bold'>M<span className='text-primary'>e</span>ga st
+          <span className='text-primary'>o</span>re</h2>
 
         <p className="text-sm text-gray-600 dark:text-gray-300">
           © Copyright 2021. All Rights Reserved.

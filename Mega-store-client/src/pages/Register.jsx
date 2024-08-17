@@ -6,6 +6,8 @@ import axios from "axios";
 import Spinner from "../components/Spinner";
 import { useContext } from "react";
 import { Context } from "../Provider/AuthProvider";
+import Swal from 'sweetalert2'
+
 const Register = () => {
   const axiosPublic = useAxiosPublic()
   // const navigate = useNavigate()
@@ -16,32 +18,32 @@ const Register = () => {
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-    // setLoading(true)
+    setLoading(true)
     const form = event.target
     const email = form.email.value
     const name = form.fullName.value
     const password = form.password.value
 
     // Validation
-    // if (password.length < 6) {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Please Enter A Password Of At Least 6 Characters",
-    //     });
-    //     return;
-    // } else if (!/[A-Z]/.test(password)) {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Please Enter A Password Of At Least 1 Uppercase Character",
-    //     });
-    //     return;
-    // } else if (!/[a-z]/.test(password)) {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Please Enter A Password Of At Least 1 Lowercase Character",
-    //     });
-    //     return;
-    // }
+    if (password.length < 6) {
+        Swal.fire({
+            icon: "error",
+            title: "Please Enter A Password Of At Least 6 Characters",
+        });
+        return;
+    } else if (!/[A-Z]/.test(password)) {
+        Swal.fire({
+            icon: "error",
+            title: "Please Enter A Password Of At Least 1 Uppercase Character",
+        });
+        return;
+    } else if (!/[a-z]/.test(password)) {
+        Swal.fire({
+            icon: "error",
+            title: "Please Enter A Password Of At Least 1 Lowercase Character",
+        });
+        return;
+    }
 
     // for profile pic
     const profileImage = form.profileImage.files[0]
@@ -78,13 +80,13 @@ const Register = () => {
                 toast.success('Successfully register')
               }
               navigate(from);
-              // setLoading(false)
+              setLoading(false)
             })
         })
 
     } catch (err) {
       toast.error(err.message)
-      // setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -161,13 +163,13 @@ const Register = () => {
           </div>
 
           <div>
-            <button type='submit' className='bg-primary w-full rounded-md  p-2'>
+            <button type='submit' className='bg-primary text-white w-full rounded-md  p-2'>
               Sign Up
             </button>
           </div>
         </form>
 
-        <p className=' text-sm text-center text-gray-400'>
+        <p className=' text-sm text-center text-gray-400 mt-3'>
           Already have an account?{' '}
           <Link to='/login' className='hover:underline hover:text-primary text-gray-600'>
             Login

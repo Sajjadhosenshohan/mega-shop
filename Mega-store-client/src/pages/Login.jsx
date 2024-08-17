@@ -5,41 +5,45 @@ import useAxiosPublic from "../Hooks/UseAxiosPublic";
 import { FcGoogle } from "react-icons/fc";
 import { useContext } from "react";
 import { Context } from "../Provider/AuthProvider";
+import Swal from 'sweetalert2'
+
 const Login = () => {
+  
   const axiosPublic = useAxiosPublic()
   // const navigate = useNavigate()
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.pathname || "/";
-  const { signIn, loading, signInWithGoogle } = useContext(Context)
+  const { signIn, loading, signInWithGoogle , setLoading} = useContext(Context)
 
   const handleSignUp = async (event) => {
+
     event.preventDefault();
-    // setLoading(true)
+    setLoading(true)
     const form = event.target
     const email = form.email.value
     const password = form.password.value
 
     // Validation
-    // if (password.length < 6) {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Please Enter A Password Of At Least 6 Characters",
-    //     });
-    //     return;
-    // } else if (!/[A-Z]/.test(password)) {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Please Enter A Password Of At Least 1 Uppercase Character",
-    //     });
-    //     return;
-    // } else if (!/[a-z]/.test(password)) {
-    //     Swal.fire({
-    //         icon: "error",
-    //         title: "Please Enter A Password Of At Least 1 Lowercase Character",
-    //     });
-    //     return;
-    // }
+    if (password.length < 6) {
+        Swal.fire({
+            icon: "error",
+            title: "Please Enter A Password Of At Least 6 Characters",
+        });
+        return;
+    } else if (!/[A-Z]/.test(password)) {
+        Swal.fire({
+            icon: "error",
+            title: "Please Enter A Password Of At Least 1 Uppercase Character",
+        });
+        return;
+    } else if (!/[a-z]/.test(password)) {
+        Swal.fire({
+            icon: "error",
+            title: "Please Enter A Password Of At Least 1 Lowercase Character",
+        });
+        return;
+    }
 
     try {
 
@@ -50,13 +54,13 @@ const Login = () => {
 
           toast.success('Successfully login')
           navigate(from)
-          // setLoading(false)
+          setLoading(false)
 
         })
 
     } catch (err) {
       toast.error(err.message)
-      // setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -78,11 +82,13 @@ const Login = () => {
             if (res.data.insertedId) {
               toast.success('successfully login')
               navigate(from);
+              setLoading(false)
             }
           })
       })
       .catch(error => {
         toast.error(error.message)
+        setLoading(false)
       })
 
   }
@@ -134,8 +140,8 @@ const Login = () => {
           </div>
 
           <div>
-            <button type='submit' className='bg-primary w-full rounded-md  p-2'>
-              Sign Up
+            <button type='submit' className='bg-primary text-white w-full rounded-md  p-2'>
+              login
             </button>
           </div>
         </form>
@@ -154,9 +160,9 @@ const Login = () => {
         </div>
 
         <p className=' text-sm text-center text-gray-400'>
-          Already have an account?{' '}
-          <Link to='/login' className='hover:underline hover:text-primary text-gray-600'>
-            Login
+          Do not have an account?{' '}
+          <Link to='/register' className='hover:underline hover:text-primary text-gray-600'>
+            Register
           </Link>
         </p>
       </div>

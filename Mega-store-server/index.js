@@ -84,17 +84,19 @@ async function run() {
 
             };
 
+            // query by category name
+            const category = req.query.category || "";
+            if (category) {
+                query.category = category;
+            }
+
             // query by brand name
             const brandName = req.query.brandName || "";
             if (brandName) {
                 query.brandName = brandName;
             }
 
-            // query by category name
-            const category = req.query.category || "";
-            if (category) {
-                query.category = category;
-            }
+            
 
             // search
             const search = req.query.search || "";
