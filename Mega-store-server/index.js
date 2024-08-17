@@ -7,8 +7,9 @@ const port = process.env.PORT || 3000;
 
 const corsOptions = {
     origin: [
-        "http://localhost:5173",
-        "http://localhost:5174",
+        // "http://localhost:5173",
+        // "http://localhost:5174",
+        "https://megastore54.netlify.app"
     ],
     credentials: true,
 }
@@ -32,31 +33,6 @@ async function run() {
     try {
         const megaShop_user_collection = client.db("megaShop").collection("megaShop_user");
         const megaShop_products_collection = client.db("megaShop").collection("megaShop-products");
-
-
-        // // jwt related api
-        // app.post('/jwt', async (req, res) => {
-        //     const user = req.body;
-        //     const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
-        //     res.send({ token });
-        // })
-
-        // // middlewares 
-        // const verifyToken = (req, res, next) => {
-        //     // console.log('inside verify token', req.headers.authorization);
-        //     if (!req.headers.authorization) {
-        //         return res.status(401).send({ message: 'unauthorized access' });
-        //     }
-        //     const token = req.headers.authorization.split(' ')[1];
-        //     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-        //         if (err) {
-        //             return res.status(401).send({ message: 'unauthorized access' })
-        //         }
-        //         req.decoded = decoded;
-        //         next();
-        //     })
-        // }
-
 
 
         // await client.db("admin").command({ ping: 1 });
