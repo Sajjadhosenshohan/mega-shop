@@ -9,9 +9,8 @@ import Pagination from "../components/Pagination";
 
 const Home = () => {
   const axiosPublic = useAxiosPublic()
-  const { loading, user, brandName, category, minPrice, maxPrice, setBrandName, setCategory, setMinPrice, setMaxPrice, setAllProducts } = useContext(Context);
-  // akta state neben
-  // const [category, setCategory] = useState('')
+  const { loading,  brandName, category, minPrice, maxPrice, setBrandName, setCategory, setMinPrice, setMaxPrice, setAllProducts } = useContext(Context);
+
 
   // pagination
   const [currentPage, setCurrentPage] = useState(0);
@@ -37,14 +36,13 @@ const Home = () => {
       return data;
     },
   });
-  // console.log(data)
-  // console.log(brandName)
+
 
 
   // pagination
   const { products = [], count = 0 } = data || {};
 
-  // please skip this function its painful to setup
+  // send brand inf
   useEffect(() => {
     setAllProducts(products);
   }, [data]);
