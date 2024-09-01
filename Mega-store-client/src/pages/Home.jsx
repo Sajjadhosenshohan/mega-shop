@@ -42,7 +42,7 @@ const Home = () => {
   // pagination
   const { products = [], count = 0 } = data || {};
 
-  // send brand inf
+  // send brand info
   useEffect(() => {
     setAllProducts(products);
   }, [data]);
